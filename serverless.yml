@@ -1,0 +1,17 @@
+service: teamlens-dev
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-south-1
+
+functions:
+  app:
+    handler: apis/resources/handler.handler
+    events:
+      - http:
+          path: /resources
+          method: any
+
+plugins:
+  - serverless-offline  # Add this plugin

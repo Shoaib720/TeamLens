@@ -1,6 +1,9 @@
+require('dotenv').config(); // Load environment variables from .env
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const session = require("express-session");
+const resourceController = require("./controllers/resourceController");
 
 const app = express();
 
@@ -10,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Set up session management
 app.use(
   session({
-    secret: "mysecret", // Replace with a stronger secret in production
+    secret: process.env.SESSION_SECRET, // Replace with a stronger secret in production
     resave: false,
     saveUninitialized: false,
   })
@@ -18,6 +21,13 @@ app.use(
 
 // Set the view engine to EJS
 app.set("view engine", "ejs");
+
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI);
+mongoose.connection.once("open", () => {
+    console.log("Connected to MongoDB");
+});
 
 // User data for demo (replace with a database in real app)
 const users = {
@@ -56,6 +66,12 @@ app.get("/dashboard", (req, res) => {
     res.render("dashboard", { user: dummy_user });
 });
 
+// Resource management routes (use resourceController)
+app.get("/resources", resourceController.getResources);
+app.post("/resources", resourceController.createResource);
+app.post("/resources/update/:id", resourceController.updateResource);
+app.post("/resources/delete/:id", resourceController.deleteResource);
+
 // GET: Logout and destroy session
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
@@ -64,6 +80,6 @@ app.get("/logout", (req, res) => {
 });
 
 // Start the server
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
