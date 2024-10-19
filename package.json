@@ -1,22 +1,15 @@
 {
   "name": "teamlens",
   "version": "1.0.0",
+  "description": "TeamLens is a web application to have visual insights of your team management activities such as Requirement-Resource Mapping, Training-Resource Mapping, etc",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "body-parser": "^1.20.3",
-    "ejs": "^3.1.10",
-    "express": "^4.21.1",
-    "express-session": "^1.18.1"
-  },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "serverless-offline": "^14.3.3"
   }
 }
