@@ -20,8 +20,9 @@ jobs:
 
       - name: Install resource service dependencies
         run: |
-          cd apis/resources
+          pushd apis/resources
           npm install
+          popd
 
       - name: Install Serverless Framework
         run: npm install -g serverless serverless-offline
