@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install project dependencies
+        run: npm install
+
       - name: Install resource service dependencies
         run: |
           pushd apis/resources
@@ -25,7 +28,7 @@ jobs:
           popd
 
       - name: Install Serverless Framework
-        run: npm install -g serverless serverless-offline
+        run: npm install -g serverless
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
