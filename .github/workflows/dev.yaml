@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: Install resource service dependencies
-        run: -|
+        run: |
           cd apis/resources
           npm install
 
