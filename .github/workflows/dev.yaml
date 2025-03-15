@@ -28,7 +28,7 @@ jobs:
         run: python scripts/google_sheet_to_csv.py
         env:
           SHEET_ID: "${{ vars.GOOGLE_SHEET_ID }}"  # Change if needed
-          SHEET_NAME: "${{ vars.GOOGLE_SHEET_NAME }}"  # Change if needed
+          SHEET_NAMES: "${{ vars.GOOGLE_SHEET_NAMES }}"  # Change if needed
 
       - name: Upload CSV as Artifact
         uses: actions/upload-artifact@v4
