@@ -34,8 +34,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: google-sheet-csv
-          path: google_sheet.csv
+          path: "*.csv"
 
       - name: Clean up
         if: always()
-        run: rm creds.json google_sheet.csv || true
+        run: rm creds.json *.csv || true
