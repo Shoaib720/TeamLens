@@ -16,8 +16,8 @@ client = gspread.authorize(creds)
 sheet = client.open_by_key(SHEET_ID).worksheet(SHEET_NAME)
 
 # Get all records and convert to DataFrame
-data = sheet.get_all_records()
-df = pd.DataFrame(data)
+data = sheet.get_all_values()
+df = pd.DataFrame(data[1:], columns=data[1])
 
 # Save DataFrame to CSV
 csv_filename = "google_sheet.csv"
