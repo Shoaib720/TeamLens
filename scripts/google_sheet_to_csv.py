@@ -27,7 +27,7 @@ for sheet_name in SHEET_NAMES:
             continue
 
         # Extract only the table part (starting from row 2)
-        df = pd.DataFrame(rows[1:], columns=rows[1])  # Use row 2 (index 1) as headers
+        df = pd.DataFrame(rows[2:], columns=rows[1])  # Use row 2 (index 1) as headers
 
         # Remove any duplicate headers in the data rows
         df = df[df.columns[df.iloc[0] != df.columns[0]]]  # Remove duplicate headers if found
