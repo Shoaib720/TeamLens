@@ -6,9 +6,9 @@ import pandas as pd
 
 # Load the CSV file
 # file_path = ".data/engagements.csv"  # Replace with your actual CSV file path
-engagements_df = pd.read_csv(".data/engagements.csv")
-members_df = pd.read_csv(".data/members.csv")
-trainings_df = pd.read_csv(".data/trainings.csv")
+engagements_df = pd.read_csv("data/engagements.csv")
+members_df = pd.read_csv("data/members.csv")
+trainings_df = pd.read_csv("data/trainings.csv")
 
 
 # ===== Engagements =========

@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: google-sheet-csv
-          path: artifacts
+          path: data
 
       - name: Set up Python
         uses: actions/setup-python@v4
