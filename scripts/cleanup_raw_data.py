@@ -29,10 +29,12 @@ trainings_df['Trainers'] = trainings_df['Trainers'].fillna(method='ffill')
 # Save cleaned CSV (optional)
 engagements_df.to_csv("artifacts/cleaned_engagements.csv", index=False)
 trainings_df.to_csv("artifacts/cleaned_trainings.csv", index=False)
+members_df.to_csv("artifacts/cleaned_members.csv", index=False)
 
 # Print first few rows for verification
 print(engagements_df.head())
 print(trainings_df.head())
+print(members_df.head())
 
 # def fill_missing_values(df, fill_map):
 #     """
