@@ -4,9 +4,9 @@ on:
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
-  convert-sheet-to-csv:
+  extract:
+    name: Extract Google Sheets to CSV
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,17 +25,52 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Run Python Script to Convert Google Sheet to CSV
-        run: python scripts/google_sheet_to_csv.py
+        run: python scripts/extract_csv.py
         env:
           SHEET_ID: "${{ vars.GOOGLE_SHEET_ID }}"  # Change if needed
           SHEET_NAMES: "${{ vars.GOOGLE_SHEET_NAMES }}"  # Change if needed
 
-      - name: Upload CSV as Artifact
+      - name: Upload CSV as Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: google-sheet-csv
-          path: "*.csv"
+          path: "artifacts/*.csv"
 
       - name: Clean up
         if: always()
-        run: rm creds.json *.csv || true
+        run: rm creds.json artifacts/*.csv || true
+
+  clean:
+    name: Clean
+    runs-on: ubuntu-latest
+    needs: [extract]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download CSV Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: google-sheet-csv
+          path: artifacts
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Run Cleansing scripts
+        run: python scripts/cleanup_raw_data.py
+
+      - name: Upload Cleansed CSV as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cleansed-csv
+          path: "artifacts/*.csv"
+
+      - name: Clean up
+        if: always()
+        run: rm artifacts/*.csv || true

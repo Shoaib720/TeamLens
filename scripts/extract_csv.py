@@ -33,7 +33,7 @@ for sheet_name in SHEET_NAMES:
         df = df[df.columns[df.iloc[0] != df.columns[0]]]  # Remove duplicate headers if found
 
         # Save DataFrame to CSV
-        csv_filename = f"{sheet_name.strip().replace(' ', '_').lower()}.csv"
+        csv_filename = f"artifacts/{sheet_name.strip().replace(' ', '_').lower()}.csv"
         df.to_csv(csv_filename, index=False)
 
         print(f"CSV file '{csv_filename}' has been generated successfully!")
