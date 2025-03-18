@@ -1,4 +1,4 @@
-name: Google Sheet to CSV
+name: ETL Workflow
 
 on:
   workflow_dispatch:  # Allows manual trigger
