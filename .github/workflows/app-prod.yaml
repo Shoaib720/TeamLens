@@ -5,14 +5,17 @@ on:
     branches:
       - main
     paths:
-      - 'teamLens/**'
+      - 'teamlens/**'
       - 'rmg/**'
+      - 'templates/**'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: live
+    environment:
+      name: production
+      url: ${{ vars.TEAMLENS_LIVE_URL }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
