@@ -25,7 +25,7 @@ jobs:
         key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
         script: |
           cd /home/ubuntu/TeamLens
-          git pull origin develop
+          git pull origin main
           source venv/bin/activate
           pip install -r requirements.txt
           python manage.py migrate
