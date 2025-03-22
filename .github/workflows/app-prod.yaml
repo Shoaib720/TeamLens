@@ -5,8 +5,9 @@ on:
     branches:
       - main
     paths:
-      - 'teamLens/**'
+      - 'teamlens/**'
       - 'rmg/**'
+      - 'templates/**'
   workflow_dispatch:
 
 jobs:
