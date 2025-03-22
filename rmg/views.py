@@ -10,7 +10,7 @@ def index(request):
         marked_deleted=False
     ).exclude(
         status__in=['Fulfilled', 'Inactivated']
-    ).order_by('-updated_at')
+    ).order_by('-requirement_name')
     instance = None
     
     if request.method == 'POST':
