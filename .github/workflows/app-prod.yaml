@@ -14,7 +14,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: live
       url: ${{ vars.TEAMLENS_LIVE_URL }}
     steps:
     - name: Checkout code
