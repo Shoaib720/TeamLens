@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block title %}Login - TeamLens{% endblock %}
+
+{% block extra_head %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .login-box {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .btn-primary {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="login-box">
+    <h3 class="text-center mb-4">Please Log In</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Username</label>
+            {{ form.username|add_class:"form-control" }}
+        </div>
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            {{ form.password|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+{% endblock %}
