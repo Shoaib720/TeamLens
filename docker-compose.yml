@@ -1,18 +1,4 @@
 services:
-  user-service:
-    build:
-      context: ./apis/user-service
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    environment:
-      DB_HOST: mysql
-      DB_USER: root
-      DB_PASS: example
-      DB_NAME: userdb
-    depends_on:
-      - mysql
-
   mysql:
     image: mysql:8.0
     environment:
