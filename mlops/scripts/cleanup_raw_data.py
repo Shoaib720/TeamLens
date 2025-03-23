@@ -1,14 +1,14 @@
 # This script will perform the following:
 # 1. Forward fill merged columns
 # 2. Address null fields
+# 3. Convert date columns to datetime
 
-import pandas as pd
+from pandas import read_csv, to_datetime
 
 # Load the CSV file
-# file_path = ".data/engagements.csv"  # Replace with your actual CSV file path
-engagements_df = pd.read_csv("data/engagements.csv")
-members_df = pd.read_csv("data/members.csv")
-trainings_df = pd.read_csv("data/trainings.csv")
+engagements_df = read_csv("mlops/data/engagements.csv")
+members_df = read_csv("mlops/data/members.csv")
+trainings_df = read_csv("mlops/data/trainings.csv")
 
 
 # ===== Engagements =========
@@ -16,20 +16,27 @@ trainings_df = pd.read_csv("data/trainings.csv")
 engagements_df['Resource'] = engagements_df['Resource'].fillna(method='ffill')
 engagements_df['Location'] = engagements_df['Location'].fillna("Onsite")
 engagements_df['Experience'] = engagements_df['Experience'].fillna("4+")
+engagements_df["Start Date"] = to_datetime(engagements_df["Start Date"], format="%d %b, %Y", errors="coerce")
+engagements_df["End Date"] = to_datetime(engagements_df["End Date"], format="%d %b, %Y", errors="coerce")
 
 # ===== Trainings =========
 trainings_df['Program Name'] = trainings_df['Program Name'].fillna(method='ffill')
 trainings_df['Start Date'] = trainings_df['Start Date'].fillna(method='ffill')
 trainings_df['End Date'] = trainings_df['End Date'].fillna(method='ffill')
 trainings_df['Trainers'] = trainings_df['Trainers'].fillna(method='ffill')
+trainings_df["Start Date"] = to_datetime(trainings_df["Start Date"], format="%d %b, %Y", errors="coerce")
+trainings_df["End Date"] = to_datetime(trainings_df["End Date"], format="%d %b, %Y", errors="coerce")
+
 
 # ===== Members =========
 # No cleanup yet
+members_df["DoJ"] = to_datetime(members_df["DoJ"], format="%d %b, %Y", errors="coerce")
+members_df["Committed till"] = to_datetime(members_df["Committed till"], format="%b, %Y", errors="coerce")
 
 # Save cleaned CSV (optional)
-engagements_df.to_csv("artifacts/cleaned_engagements.csv", index=False)
-trainings_df.to_csv("artifacts/cleaned_trainings.csv", index=False)
-members_df.to_csv("artifacts/cleaned_members.csv", index=False)
+engagements_df.to_csv("mlops/artifacts/cleaned_engagements.csv", index=False)
+trainings_df.to_csv("mlops/artifacts/cleaned_trainings.csv", index=False)
+members_df.to_csv("mlops/artifacts/cleaned_members.csv", index=False)
 
 # Print first few rows for verification
 print(engagements_df.head())

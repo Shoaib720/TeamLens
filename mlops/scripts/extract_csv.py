@@ -1,18 +1,18 @@
-import os
-import pandas as pd
-import gspread
+from os import getenv
+from pandas import DataFrame
+from gspread import authorize
 from google.oauth2.service_account import Credentials
 
 # Load environment variables
-SHEET_ID = os.getenv("SHEET_ID")  # Google Sheet ID
-SHEET_NAMES = os.getenv("SHEET_NAMES", "Sheet1,Sheet2").split(",")  # Multiple sheets
+SHEET_ID = getenv("SHEET_ID")  # Google Sheet ID
+SHEET_NAMES = getenv("SHEET_NAMES", "Sheet1,Sheet2").split(",")  # Multiple sheets
 
 # Authenticate using service account JSON file
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 creds = Credentials.from_service_account_file("creds.json", scopes=SCOPES)
 
 # Connect to Google Sheets
-client = gspread.authorize(creds)
+client = authorize(creds)
 for sheet_name in SHEET_NAMES:
     try:
         # Open each sheet
@@ -27,13 +27,13 @@ for sheet_name in SHEET_NAMES:
             continue
 
         # Extract only the table part (starting from row 2)
-        df = pd.DataFrame(rows[2:], columns=rows[1])  # Use row 2 (index 1) as headers
+        df = DataFrame(rows[2:], columns=rows[1])  # Use row 2 (index 1) as headers
 
         # Remove any duplicate headers in the data rows
         df = df[df.columns[df.iloc[0] != df.columns[0]]]  # Remove duplicate headers if found
 
         # Save DataFrame to CSV
-        csv_filename = f"artifacts/{sheet_name.strip().replace(' ', '_').lower()}.csv"
+        csv_filename = f"mlops/artifacts/{sheet_name.strip().replace(' ', '_').lower()}.csv"
         df.to_csv(csv_filename, index=False)
 
         print(f"CSV file '{csv_filename}' has been generated successfully!")

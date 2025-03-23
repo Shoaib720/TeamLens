@@ -7,12 +7,12 @@
 # Trainee are those of type 'Trainee'
 # Bench are those who dont fall in any of the above categories
 
-import pandas as pd
+from pandas import read_csv, concat, DataFrame
 
 # Read members and engagements
-engagements_df = pd.read_csv("data/cleaned_engagements.csv")
-members_df = pd.read_csv("data/cleaned_members.csv")
-trainings_df = pd.read_csv("data/cleaned_trainings.csv")
+engagements_df = read_csv("mlops/data/cleaned_engagements.csv")
+members_df = read_csv("mlops/data/cleaned_members.csv")
+trainings_df = read_csv("mlops/data/cleaned_trainings.csv")
 
 active_engagements_df = engagements_df[engagements_df['End Date'].isnull()]
 active_trainings_df = trainings_df[trainings_df['End Date'].isnull()]
@@ -27,7 +27,7 @@ shadow_engagements_df = active_engagements_df[active_engagements_df['Model'].str
 
 print(shadow_engagements_df.head())
 categorized_resources = set(
-    pd.concat([
+    concat([
         onsite_engagements_df["Resource"],
         single_engagements_df["Resource"],
         multi_engagements_df["Resource"],
@@ -40,10 +40,10 @@ all_resources = set(members_df["Members"])
 
 bench_resources = all_resources - categorized_resources
 
-summary_df = pd.DataFrame({
+summary_df = DataFrame({
     "Type": ["Onsite", "Single Offshore", "Multiple Offshore", "Shadow", "Training", "Bench"],
     "Count": [len(onsite_engagements_df), len(single_engagements_df), len(multi_engagements_df), len(shadow_engagements_df), len(active_trainings_df), len(bench_resources)],
     "Names": [", ".join(onsite_engagements_df["Resource"]), ", ".join(single_engagements_df["Resource"]), ", ".join(multi_engagements_df["Resource"].drop_duplicates(ignore_index=True)), ", ".join(shadow_engagements_df["Resource"] + " (" + shadow_engagements_df["Model"].str.extract(r'\((.*?)\)')[0] + ")"), ", ".join(active_trainings_df["Participants"]), ", ".join(bench_resources)]
 })
 print(summary_df)
-summary_df.to_csv("artifacts/resource_summary.csv", index=False)
+summary_df.to_csv("mlops/artifacts/resource_summary.csv", index=False)

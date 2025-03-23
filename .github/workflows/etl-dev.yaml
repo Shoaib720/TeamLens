@@ -25,7 +25,7 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Run Python Script to Convert Google Sheet to CSV
-        run: python scripts/extract_csv.py
+        run: python mlops/scripts/extract_csv.py
         env:
           SHEET_ID: "${{ vars.GOOGLE_SHEET_ID }}"  # Change if needed
           SHEET_NAMES: "${{ vars.GOOGLE_SHEET_NAMES }}"  # Change if needed
@@ -34,11 +34,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: google-sheet-csv
-          path: "artifacts/*.csv"
+          path: "mlops/artifacts/*.csv"
 
       - name: Clean up
         if: always()
-        run: rm creds.json artifacts/*.csv || true
+        run: rm creds.json mlops/artifacts/*.csv || true
 
   clean:
     name: Clean raw data
@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: google-sheet-csv
-          path: data
+          path: mlops/data
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -63,14 +63,84 @@ jobs:
         run: pip install pandas
 
       - name: Run Cleansing scripts
-        run: python scripts/cleanup_raw_data.py
+        run: python mlops/scripts/cleanup_raw_data.py
 
       - name: Upload Cleansed CSV as Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: cleansed-csv
-          path: "artifacts/*.csv"
+          path: "mlops/artifacts/*.csv"
 
       - name: Clean up
         if: always()
-        run: rm artifacts/*.csv || true
+        run: rm mlops/artifacts/*.csv || true
+
+  transform:
+    name: Transform
+    runs-on: ubuntu-latest
+    needs: [clean]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download CSV Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: cleansed-csv
+          path: mlops/data
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Run transformation scripts
+        run: python mlops/scripts/cleanup_raw_data.py
+
+      - name: Upload transformed CSV as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: transformed-csv
+          path: "mlops/artifacts/*.csv"
+
+      - name: Clean up
+        if: always()
+        run: rm mlops/artifacts/*.csv || true
+
+  # load:
+  #   name: Load
+  #   runs-on: ubuntu-latest
+  #   needs: [transform]
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Download CSV Artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: transformed-csv
+  #         path: mlops/data
+
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.11'
+
+  #     - name: Install dependencies
+  #       run: pip install pandas
+
+  #     - name: Run transformation scripts
+  #       run: python mlops/scripts/cleanup_raw_data.py
+
+  #     - name: Upload transformed CSV as artifacts
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: transformed-csv
+  #         path: "mlops/artifacts/*.csv"
+
+  #     - name: Clean up
+  #       if: always()
+  #       run: rm mlops/artifacts/*.csv || true
