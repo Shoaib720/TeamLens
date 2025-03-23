@@ -20,7 +20,7 @@ active_trainings_df = trainings_df[trainings_df['End Date'].isnull()]
 # print(active_engagements_df.head())
 
 onsite_engagements_df = active_engagements_df[active_engagements_df['Location'] != 'Remote']
-remote_front_engagements_df = active_engagements_df[(active_engagements_df['Location'] == 'Remote') & (~active_engagements_df['Model'].str.contains('Shadow'))]
+remote_front_engagements_df = active_engagements_df[(active_engagements_df['Location'] == 'Remote') & (~active_engagements_df['Model'].str.contains('Shadow', na=False))]
 single_engagements_df = remote_front_engagements_df.groupby('Resource').filter(lambda x: len(x) == 1)
 multi_engagements_df = remote_front_engagements_df.groupby('Resource').filter(lambda x: len(x) > 1)
 shadow_engagements_df = active_engagements_df[active_engagements_df['Model'].str.contains('Shadow')]
